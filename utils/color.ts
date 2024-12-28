@@ -22,20 +22,37 @@ function rgbToHex(r: number, g: number, b: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
 }
 
-function createShade(rgb: number[], shadeFactor: number): number[] {
+function createShade(
+  rgb: [number, number, number],
+  shadeFactor: number
+): [number, number, number] {
   if (shadeFactor === 0) return rgb;
   return shadeFactor < 0
     ? makeRgbArrayDarker(rgb, -shadeFactor)
     : makeRgbArrayLighter(rgb, shadeFactor);
 }
 
-function makeRgbArrayLighter(rgb: number[], tintFactor: number): number[] {
-  return rgb.map((v) => Math.round(v + (255 - v) * tintFactor));
+function makeRgbArrayLighter(
+  rgb: [number, number, number],
+  tintFactor: number
+): [number, number, number] {
+  return rgb.map((v) => Math.round(v + (255 - v) * tintFactor)) as [
+    number,
+    number,
+    number
+  ];
 }
 
-function makeRgbArrayDarker(rgb: number[], shadeFactor: number): number[] {
+function makeRgbArrayDarker(
+  rgb: [number, number, number],
+  shadeFactor: number
+): [number, number, number] {
   const shadeFactorSub = 1 - shadeFactor;
-  return rgb.map((v) => Math.round(v * shadeFactorSub));
+  return rgb.map((v) => Math.round(v * shadeFactorSub)) as [
+    number,
+    number,
+    number
+  ];
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -60,7 +77,7 @@ export function generatePalette(baseHex: string): ColorToken[] {
 
   return shadeFactors.map(({ token, factor }) => {
     const rgb = createShade(baseRgb, factor);
-    const hex = rgbToHex(...rgb);
+    const hex = rgbToHex(...rgb); // No error because `rgb` is typed as [number, number, number]
 
     return {
       token,
