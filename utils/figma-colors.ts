@@ -7,7 +7,10 @@ export interface FigmaToken {
   shade: number;
 }
 
-function createShade(rgb: number[], shadeFactor: number): number[] {
+function createShade(
+  rgb: [number, number, number],
+  shadeFactor: number
+): [number, number, number] {
   if (shadeFactor === 0) return rgb;
 
   if (shadeFactor < 0) {
@@ -17,17 +20,31 @@ function createShade(rgb: number[], shadeFactor: number): number[] {
   }
 }
 
-function makeRgbArrayLighter(rgb: number[], tintFactor: number): number[] {
-  return rgb.map((v) => Math.round(v + (255 - v) * tintFactor));
+function makeRgbArrayLighter(
+  rgb: [number, number, number],
+  tintFactor: number
+): [number, number, number] {
+  return rgb.map((v) => Math.round(v + (255 - v) * tintFactor)) as [
+    number,
+    number,
+    number
+  ];
 }
 
-function makeRgbArrayDarker(rgb: number[], shadeFactor: number): number[] {
+function makeRgbArrayDarker(
+  rgb: [number, number, number],
+  shadeFactor: number
+): [number, number, number] {
   const shadeFactorSub = 1 - shadeFactor;
-  return rgb.map((v) => Math.round(v * shadeFactorSub));
+  return rgb.map((v) => Math.round(v * shadeFactorSub)) as [
+    number,
+    number,
+    number
+  ];
 }
 
 export function generateFigmaPalette(baseHex: string): FigmaToken[] {
-  const baseRgb = hexToRgb(baseHex);
+  const baseRgb = hexToRgb(baseHex); // This now returns [number, number, number]
 
   // Figma's shade factors
   const shadeFactors = [
@@ -45,7 +62,7 @@ export function generateFigmaPalette(baseHex: string): FigmaToken[] {
 
   return shadeFactors.map(({ token, factor }) => {
     const rgb = createShade(baseRgb, factor);
-    const hex = rgbToHex(...rgb);
+    const hex = rgbToHex(...rgb); // No error because `rgb` is [number, number, number]
 
     return {
       token,
