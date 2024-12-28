@@ -23,3 +23,5 @@ This repository is 🔋 battery packed with:
 - 📦 Expansion Pack — Easily install common libraries, additional components, and configs.
 
 # template-web-x
+
+# color-palette-generator
